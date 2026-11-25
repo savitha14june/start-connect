@@ -19,7 +19,7 @@ $pdo = require __DIR__ . '/../config/db.php';
 $founderId = (int) $_SESSION['user_id'];
 $founderName = (string) ($_SESSION['user_name'] ?? 'Gründer/in');
 
-// جلب الشركات المملوكة لهذا المؤسس
+// 
 $stmtCompanies = $pdo->prepare(
     'SELECT id, name, tagline, category, funding_goal, raised_amount, status, created_at
      FROM companies
@@ -29,7 +29,7 @@ $stmtCompanies = $pdo->prepare(
 $stmtCompanies->execute(['owner_user_id' => $founderId]);
 $companies = $stmtCompanies->fetchAll();
 
-// جلب رسائل وطلبات التواصل المرتبطة بشركات هذا المؤسس
+//
 $stmtMessages = $pdo->prepare(
     'SELECT cm.id, cm.name AS sender_name, cm.email AS sender_email, cm.subject,
             cm.message, cm.status, cm.created_at, c.name AS company_name

@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 session_start();
 
-
 $loginError = $_SESSION['login_error'] ?? null;
 
-// 
 unset($_SESSION['login_error']);
 
 ?>
@@ -21,52 +19,88 @@ unset($_SESSION['login_error']);
 
     <title>Login - StartConnect</title>
 
-    <link rel="stylesheet" href="/start-connect/public/assets/css/style.css">
+    <link rel="stylesheet" href="/start-connect/public/index.css">
 </head>
 
 <body>
 
-    <main class="login-container">
+    <main class="login-page">
 
-        <h1>Login</h1>
+        <div class="login-container">
 
-        <?php if ($loginError): ?>
-            <div class="error-message">
-                <?= htmlspecialchars($loginError, ENT_QUOTES, 'UTF-8') ?>
-            </div>
-        <?php endif; ?>
+            <div class="login-card">
 
-        <form action="/start-connect/actions/login.php" method="POST">
+                <div class="login-heading">
 
-            <div class="form-group">
-                <label for="email">E-Mail-Adresse</label>
+                    <a href="/start-connect/public/index.php" class="brand">
+                        <span class="brand-icon">S</span>
+                        Start<span class="brand-dot">Connect</span>
+                    </a>
 
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    autocomplete="email"
+                    <h1>Willkommen zurück!</h1>
+
+                    <p>Melden Sie sich bei Ihrem Konto an.</p>
+
+                </div>
+
+                <?php if ($loginError): ?>
+                    <div class="login-error" role="alert">
+                        <?= htmlspecialchars($loginError, ENT_QUOTES, 'UTF-8') ?>
+                    </div>
+                <?php endif; ?>
+
+                <form
+                    class="login-form"
+                    action="/start-connect/actions/login.php"
+                    method="POST"
                 >
+
+                    <div class="form-group">
+
+                        <label for="email">E-Mail-Adresse</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="name@example.com"
+                            required
+                            autocomplete="email"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="password">Passwort</label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Passwort eingeben"
+                            required
+                            autocomplete="current-password"
+                        >
+
+                    </div>
+
+                    <button type="submit" class="button button-primary">
+                        Einloggen
+                    </button>
+
+                </form>
+
+                <div class="login-footer">
+                    Noch kein Konto?
+                    <a href="/start-connect/register.php">
+                        Jetzt registrieren
+                    </a>
+                </div>
+
             </div>
 
-            <div class="form-group">
-                <label for="password">Passwort</label>
-
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    required
-                    autocomplete="off"
-                >
-            </div>
-
-            <button type="submit">
-                Einloggen
-            </button>
-
-        </form>
+        </div>
 
     </main>
 
