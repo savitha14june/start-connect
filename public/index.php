@@ -9,6 +9,41 @@ $industries = [
     'logistics' => 'Logistik',
 ];
 
+
+// $pdo = require __DIR__ . '/../config/db.php';
+
+// $filter = $_GET['branche'] ?? '';
+// $selectedIndustry = is_string($filter) && isset($industries[$filter])
+//     ? $filter
+//     : '';
+
+// $sql = 'SELECT name, industry, initials, location, idea, team, funding_eur
+//         FROM startups';
+
+// $params = [];
+
+// if ($selectedIndustry !== '') {
+//     $sql .= ' WHERE industry = :industry';
+//     $params['industry'] = $selectedIndustry;
+// }
+
+// $sql .= ' ORDER BY name';
+
+// $stmt = $pdo->prepare($sql);
+// $stmt->execute($params);
+// $visibleStartups = $stmt->fetchAll();
+
+// foreach ($visibleStartups as $index => $startup) {
+//     $visibleStartups[$index]['funding'] =
+//         number_format((int) $startup['funding_eur'], 0, ',', '.') . ' €';
+// } 
+
+
+
+
+
+
+
 $startups = [
     [
         'name' => 'Solara Grid',
@@ -39,6 +74,10 @@ $startups = [
     ],
 ];
 
+
+
+
+
 $filter = $_GET['branche'] ?? '';
 $selectedIndustry = is_string($filter) && isset($industries[$filter]) ? $filter : '';
 
@@ -65,19 +104,7 @@ function escape(string $value): string
 <body>
     <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
-    <header class="site-header">
-        <div class="container header-inner">
-            <a class="brand" href="./index.php" aria-label="StartConnect – Startseite">
-                <span class="brand-icon" aria-hidden="true">↗</span>
-                StartConnect<span class="brand-dot">.</span>
-            </a>
-            <nav class="main-nav" aria-label="Hauptnavigation">
-                <a href="#startups">Startups</a>
-                <a href="#ablauf">So funktioniert’s</a>
-            </nav>
-            <a class="button button-outline header-cta" href="#startups">Startups entdecken <span aria-hidden="true">↗</span></a>
-        </div>
-    </header>
+   <?php require __DIR__ . '/../includes/header.html'; ?>
 
     <main id="main">
         <section class="hero" aria-labelledby="hero-title">
@@ -179,12 +206,7 @@ function escape(string $value): string
         </section>
     </main>
 
-    <footer class="site-footer">
-        <div class="container footer-inner">
-            <a class="brand" href="./index.php"><span class="brand-icon" aria-hidden="true">↗</span>StartConnect<span class="brand-dot">.</span></a>
-            <p>Abschlussprojekt · Startups und Investoren</p>
-        </div>
-    </footer>
+    <?php require __DIR__ . '/../includes/footer.html'; ?>
 </body>
 </html>
 
