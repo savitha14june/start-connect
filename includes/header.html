@@ -1,19 +1,58 @@
 <header class="site-header">
     <div class="container header-inner">
-        <a class="brand" href="index.php" aria-label="StartConnect – Startseite">
-            <span class="brand-icon" aria-hidden="true">↗</span>
-            StartConnect<span class="brand-dot">.</span>
-        </a>
+        <a class="brand" href="index.php">StartConnect</a>
 
-        <nav class="main-nav" aria-label="Hauptnavigation">
-            <a href="investoren.php">FÜR INVESTOREN</a>
-            <a href="startups.php">FÜR STARTUPS</a>
-            <a href="ueberuns.php">ÜBER UNS</a>
-            <a href="kontakt.php">KONTAKT</a>
+        <nav class="site-nav" aria-label="Hauptnavigation">
+            <a href="index.php#startups">Startups</a>
+            <a href="investoren.php">Investoren</a>
+            <a href="kontakt.php">Kontakt</a>
+            <button type="button" class="button button-dark" id="open-signup-modal">
+                Registrieren
+            </button>
         </nav>
-
-        <a class="button button-outline header-cta" href="index.php#Login">
-            LOG IN <span aria-hidden="true">↗</span>
-        </a>
     </div>
 </header>
+
+<dialog id="signup-choice-dialog" aria-labelledby="signup-choice-title">
+    <div class="signup-modal-card">
+        <button type="button" class="signup-modal-close" id="close-signup-modal" aria-label="Schließen">✕</button>
+        <p class="eyebrow">Konto erstellen</p>
+        <h2 id="signup-choice-title">Als Unternehmen oder Investor registrieren?</h2>
+        <p>Wähle den passenden Bereich für deine Registrierung:</p>
+
+        <div class="signup-modal-actions">
+            <a class="button button-dark" href="signup-company.php">
+                Unternehmen / Gründer <span aria-hidden="true">↗</span>
+            </a>
+            <a class="button button-primary" href="signup-investor.php">
+                Investor <span aria-hidden="true">↗</span>
+            </a>
+        </div>
+    </div>
+</dialog>
+
+<script>
+(() => {
+    const dialog = document.getElementById('signup-choice-dialog');
+    const openBtn = document.getElementById('open-signup-modal');
+    const closeBtn = document.getElementById('close-signup-modal');
+
+    if (!dialog || !openBtn || !closeBtn) return;
+
+    openBtn.addEventListener('click', () => {
+        if (typeof dialog.showModal === 'function') {
+            dialog.showModal();
+        } else {
+            dialog.setAttribute('open', '');
+        }
+    });
+
+    closeBtn.addEventListener('click', () => dialog.close());
+
+    dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) {
+            dialog.close();
+        }
+    });
+})();
+</script>
