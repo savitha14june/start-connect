@@ -3,14 +3,25 @@ declare(strict_types=1);
 
 session_start();
 
+require_once __DIR__ . '/../src/logger.php';
+require_once __DIR__ . '/../src/repositories/ContactMessageRepo.php';
+require_once __DIR__ . '/../src/services/ContactMessageService.php';
+
+use App\Logger;
+
+$logger = new Logger(__DIR__ . '/../logs/app.log');
+
+$pdo = require __DIR__ . '/../config/db.php';
+if (!($pdo instanceof PDO) && isset($GLOBALS['pdo']) && $GLOBALS['pdo'] instanceof PDO) {
+    $pdo = $GLOBALS['pdo'];
+}
 
 $recipient = 'kontakt@startconnect.de';
-$sender = 'kontakt@eure-domain.de';
 
 $fields = [
     'first_name' => ['Vorname', 'text', 'given-name', 80, true],
     'last_name'  => ['Nachname', 'text', 'family-name', 80, true],
-    'email'      => ['E-Mail', 'email', 'email', 254, true],
+    'email'      => ['E-Mail', 'email', 'email', 190, true],
     'phone'      => ['Telefonnummer', 'tel', 'tel', 40, false],
     'subject'    => ['Betreff', 'text', 'off', 120, false],
     'message'    => ['Nachricht', 'textarea', 'off', 3000, true],
@@ -59,39 +70,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($errors === [] && $formError === '') {
-        if (!filter_var($recipient, FILTER_VALIDATE_EMAIL)
-            || !filter_var($sender, FILTER_VALIDATE_EMAIL)) {
-            $formError = 'Der E-Mail-Versand ist noch nicht eingerichtet.';
+        if (!($pdo instanceof PDO)) {
+            $logger->error('Database PDO instance missing in public/kontakt.php');
+            $formError = 'Datenbankverbindung nicht verfügbar. Bitte versuche es später erneut.';
         } else {
-            $subject = $form['subject'] !== '' ? $form['subject'] : 'Allgemeine Anfrage';
-            $phone = $form['phone'] !== '' ? $form['phone'] : 'Keine Angabe';
+            $service = new ContactMessageService(new ContactMessageRepo($pdo, $logger));
+            $userId = isset($_SESSION['user_id']) && is_int($_SESSION['user_id'])
+                ? $_SESSION['user_id']
+                : null;
+            $companyId = isset($_GET['company_id']) && ctype_digit((string) $_GET['company_id'])
+                ? (int) $_GET['company_id']
+                : null;
 
-            $body = implode("\n", [
-                'Neue Anfrage über StartConnect',
-                '',
-                'Vorname: ' . $form['first_name'],
-                'Nachname: ' . $form['last_name'],
-                'E-Mail: ' . $form['email'],
-                'Telefon: ' . $phone,
-                'Betreff: ' . $subject,
-                '',
-                $form['message'],
-            ]);
+            $result = $service->submitContactForm($form, $errors, $userId, $companyId);
 
-            $headers = [
-                'From' => $sender,
-                'Reply-To' => $form['email'],
-                'Content-Type' => 'text/plain; charset=UTF-8',
-            ];
-
-            if (mail($recipient, 'Neue Kontaktanfrage - StartConnect', $body, $headers)) {
+            if ($result['ok']) {
                 $_SESSION['contact_sent'] = true;
                 $_SESSION['contact_token'] = bin2hex(random_bytes(32));
                 header('Location: kontakt.php#kontaktformular', true, 303);
                 exit;
             }
 
-            $formError = 'Deine Nachricht konnte nicht gesendet werden. Bitte versuche es später erneut.';
+            $formError = $result['error'] !== ''
+                ? $result['error']
+                : 'Deine Nachricht konnte nicht gespeichert werden. Bitte versuche es später erneut.';
         }
     }
 }
@@ -105,115 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Kontakt · StartConnect</title>
 
     <link rel="stylesheet" href="index.css">
-
-    <style>
-        .contact-hero {
-            padding-block: clamp(3.25rem, 8vw, 6.5rem);
-            background: radial-gradient(ellipse at 90% 15%, #295542, transparent 65%),
-                        #102c24;
-            color: #fffefa;
-        }
-
-        .contact-hero h1 {
-            max-width: 17ch;
-            font-size: clamp(2.75rem, 7vw, 5.5rem);
-            text-wrap: balance;
-        }
-
-        .contact-hero h1 em { color: #dcfa87; }
-
-        .contact-hero .contact-lead {
-            max-width: 56ch;
-            margin-top: 1rem;
-            color: #e1eee6;
-        }
-
-        .contact-section { padding-block: clamp(2.75rem, 6vw, 5rem); }
-
-        .contact-grid, .contact-form {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .contact-card, .contact-form {
-            padding: clamp(1.2rem, 4vw, 2rem);
-            border: 1px solid #d2ded3;
-            border-radius: 1.25rem;
-            background: #fffefa;
-        }
-
-        .contact-card h3 { font-size: 1.5rem; }
-        .contact-card p { margin-top: .65rem; }
-        .contact-card p, .contact-card li, .contact-note { color: #43594f; }
-
-        .contact-card ul {
-            margin: .85rem 0 0;
-            padding-left: 1.2rem;
-        }
-
-        .contact-card li + li { margin-top: .3rem; }
-
-        .contact-form-section { background: #eaf0e6; }
-        .contact-form { max-width: 48rem; }
-        .contact-note { max-width: 64ch; margin-top: .8rem; }
-
-        .contact-field { display: grid; align-content: start; gap: .35rem; }
-        .contact-wide { grid-column: 1 / -1; }
-        .contact-field label { font-weight: 700; }
-        .contact-field small { color: #43594f; font-weight: 400; }
-
-        .contact-field input,
-        .contact-field textarea {
-            width: 100%;
-            min-height: 2.85rem;
-            padding: .65rem .8rem;
-            border: 1px solid #81958a;
-            border-radius: .55rem;
-            background: #fff;
-            color: #102c24;
-            font: inherit;
-        }
-
-        .contact-field textarea { resize: vertical; }
-        .contact-field [aria-invalid="true"] { border-color: #a42318; }
-
-        .contact-feedback {
-            max-width: 48rem;
-            margin-top: 1rem;
-            padding: .75rem 1rem;
-            border-radius: .65rem;
-            background: #fffefa;
-        }
-
-        .contact-error { color: #a42318; }
-        .contact-success { color: #166534; }
-
-        .site-header [aria-current="page"] {
-            text-decoration: underline;
-            text-underline-offset: .25em;
-        }
-
-        @media (max-width: 42rem) {
-            .contact-grid, .contact-form { grid-template-columns: 1fr; }
-        }
-        .contact-card {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.contact-card ul {
-    margin-bottom: 1.25rem;
-}
-
-.contact-email-button {
-    margin-top: auto;
-    max-width: 100%;
-    white-space: normal;
-}
-    </style>
 </head>
 <body>
     <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
@@ -277,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <?php if ($sent): ?>
                     <p class="contact-feedback contact-success" role="status">
-                        Danke! Deine Nachricht wurde zum Versand angenommen.
+                        Danke! Deine Nachricht wurde gespeichert.
                     </p>
                 <?php elseif ($formError !== '' || $errors !== []): ?>
                     <p class="contact-feedback contact-error" role="alert">

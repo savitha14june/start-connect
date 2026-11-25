@@ -255,4 +255,160 @@ details p { color: var(--muted); font-size: .9rem; padding-top: .5rem; }
     .process-grid { gap: .45rem; }
 }
 
+.contact-hero {
+    padding-block: clamp(3.25rem, 8vw, 6.5rem);
+    background: radial-gradient(ellipse at 90% 15%, #295542, transparent 65%),
+                #102c24;
+    color: #fffefa;
+}
 
+.contact-hero h1 {
+    max-width: 17ch;
+    font-size: clamp(2.75rem, 7vw, 5.5rem);
+    text-wrap: balance;
+}
+
+.contact-hero h1 em {
+    color: #dcfa87;
+}
+
+.contact-hero .contact-lead {
+    max-width: 56ch;
+    margin-top: 1rem;
+    color: #e1eee6;
+}
+
+.contact-section {
+    padding-block: clamp(2.75rem, 6vw, 5rem);
+}
+
+.contact-grid,
+.contact-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.contact-card,
+.contact-form {
+    padding: clamp(1.2rem, 4vw, 2rem);
+    border: 1px solid #d2ded3;
+    border-radius: 1.25rem;
+    background: #fffefa;
+}
+
+.contact-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.contact-card h3 {
+    font-size: 1.5rem;
+}
+
+.contact-card p {
+    margin-top: .65rem;
+}
+
+.contact-card p,
+.contact-card li,
+.contact-note {
+    color: #43594f;
+}
+
+.contact-card ul {
+    margin: .85rem 0 1.25rem;
+    padding-left: 1.2rem;
+}
+
+.contact-card li + li {
+    margin-top: .3rem;
+}
+
+.contact-email-button {
+    margin-top: auto;
+    max-width: 100%;
+    white-space: normal;
+}
+
+.contact-form-section {
+    background: #eaf0e6;
+}
+
+.contact-form {
+    max-width: 48rem;
+}
+
+.contact-note {
+    max-width: 64ch;
+    margin-top: .8rem;
+}
+
+.contact-field {
+    display: grid;
+    align-content: start;
+    gap: .35rem;
+}
+
+.contact-wide {
+    grid-column: 1 / -1;
+}
+
+.contact-field label {
+    font-weight: 700;
+}
+
+.contact-field small {
+    color: #43594f;
+    font-weight: 400;
+}
+
+.contact-field input,
+.contact-field textarea {
+    width: 100%;
+    min-height: 2.85rem;
+    padding: .65rem .8rem;
+    border: 1px solid #81958a;
+    border-radius: .55rem;
+    background: #fff;
+    color: #102c24;
+    font: inherit;
+}
+
+.contact-field textarea {
+    resize: vertical;
+}
+
+.contact-field [aria-invalid="true"] {
+    border-color: #a42318;
+}
+
+.contact-feedback {
+    max-width: 48rem;
+    margin-top: 1rem;
+    padding: .75rem 1rem;
+    border-radius: .65rem;
+    background: #fffefa;
+}
+
+.contact-error {
+    color: #a42318;
+}
+
+.contact-success {
+    color: #166534;
+}
+
+.site-header [aria-current="page"] {
+    text-decoration: underline;
+    text-underline-offset: .25em;
+}
+
+@media (max-width: 42rem) {
+    .contact-grid,
+    .contact-form {
+        grid-template-columns: 1fr;
+    }
+}

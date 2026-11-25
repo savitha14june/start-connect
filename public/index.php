@@ -3,93 +3,33 @@ declare(strict_types=1);
 
 header('Content-Type: text/html; charset=UTF-8');
 
-$industries = [
-    'climate' => 'Climate Tech',
-    'health' => 'Health Tech',
-    'logistics' => 'Logistik',
-];
+require_once __DIR__ . '/../src/logger.php';
+require_once __DIR__ . '/../src/repositories/StartupRepo.php';
+require_once __DIR__ . '/../src/services/StartupService.php';
 
+use App\Logger;
 
-// $pdo = require __DIR__ . '/../config/db.php';
+$logger = new Logger(__DIR__ . '/../logs/app.log');
 
-// $filter = $_GET['branche'] ?? '';
-// $selectedIndustry = is_string($filter) && isset($industries[$filter])
-//     ? $filter
-//     : '';
+$pdo = require __DIR__ . '/../config/db.php';
+if (!($pdo instanceof PDO) && isset($GLOBALS['pdo']) && $GLOBALS['pdo'] instanceof PDO) {
+    $pdo = $GLOBALS['pdo'];
+}
 
-// $sql = 'SELECT name, industry, initials, location, idea, team, funding_eur
-//         FROM startups';
+if (!($pdo instanceof PDO)) {
+    $logger->error('Database PDO instance missing in public/index.php');
+    http_response_code(500);
+    exit('Datenbankverbindung nicht verfügbar.');
+}
 
-// $params = [];
+$service = new StartupService(new StartupRepo($pdo, $logger));
+$categories = $service->getCategories();
+$selectedCategory = $service->resolveSelectedCategory($_GET['branche'] ?? '', $categories);
+$companies = $service->getCompanyCards($selectedCategory !== '' ? $selectedCategory : null);
 
-// if ($selectedIndustry !== '') {
-//     $sql .= ' WHERE industry = :industry';
-//     $params['industry'] = $selectedIndustry;
-// }
-
-// $sql .= ' ORDER BY name';
-
-// $stmt = $pdo->prepare($sql);
-// $stmt->execute($params);
-// $visibleStartups = $stmt->fetchAll();
-
-// foreach ($visibleStartups as $index => $startup) {
-//     $visibleStartups[$index]['funding'] =
-//         number_format((int) $startup['funding_eur'], 0, ',', '.') . ' €';
-// } 
-
-
-
-
-
-
-
-$startups = [
-    [
-        'name' => 'Solara Grid',
-        'industry' => 'climate',
-        'initials' => 'SG',
-        'location' => 'Hannover',
-        'idea' => 'Software, mit der Gewerbebetriebe ihren Solarstrom gezielter nutzen und Lastspitzen reduzieren.',
-        'team' => 'Ein Gründungsteam aus Energietechnik, Softwareentwicklung und B2B-Vertrieb.',
-        'funding' => '450.000 €',
-    ],
-    [
-        'name' => 'CarePilot',
-        'industry' => 'health',
-        'initials' => 'CP',
-        'location' => 'Hamburg',
-        'idea' => 'Eine digitale Übergabe für ambulante Pflegeteams, die Informationen aus dem Arbeitsalltag bündelt.',
-        'team' => 'Ein Team mit Erfahrung in ambulanter Pflege, Produktentwicklung und UX-Design.',
-        'funding' => '300.000 €',
-    ],
-    [
-        'name' => 'Kreislogistik',
-        'industry' => 'logistics',
-        'initials' => 'KL',
-        'location' => 'Bremen',
-        'idea' => 'Eine Plattform, über die regionale Händler freie Lieferkapazitäten teilen und Retouren bündeln.',
-        'team' => 'Ein Team aus Logistikplanung, Webentwicklung und Handel.',
-        'funding' => '250.000 €',
-    ],
-];
-
-
-
-
-
-$filter = $_GET['branche'] ?? '';
-$selectedIndustry = is_string($filter) && isset($industries[$filter]) ? $filter : '';
-
-$visibleStartups = array_filter(
-    $startups,
-    static fn(array $startup): bool =>
-        $selectedIndustry === '' || $startup['industry'] === $selectedIndustry
-);
-
-function escape(string $value): string
+function escape(?string $value): string
 {
-    return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    return htmlspecialchars($value ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 ?>
 <!doctype html>
@@ -104,7 +44,7 @@ function escape(string $value): string
 <body>
     <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
-   <?php require __DIR__ . '/../includes/header.html'; ?>
+    <?php require __DIR__ . '/../includes/header.html'; ?>
 
     <main id="main">
         <section class="hero" aria-labelledby="hero-title">
@@ -136,15 +76,17 @@ function escape(string $value): string
             <div class="section-heading">
                 <div>
                     <h2 id="directory-title">Startups entdecken</h2>
-                    <p>Beispielprofile mit Geschäftsidee, Team und Finanzierungsbedarf.</p>
+                    <p>Unternehmensprofile aus der Datenbank mit Branche, Team und Finanzierungsbedarf.</p>
                 </div>
                 <form class="filter" method="get" action="index.php#startups">
                     <label for="industry">Branche</label>
                     <div class="filter-controls">
                         <select id="industry" name="branche">
                             <option value="">Alle Branchen</option>
-                            <?php foreach ($industries as $key => $industry): ?>
-                                <option value="<?= escape($key) ?>"<?= $key === $selectedIndustry ? ' selected' : '' ?>><?= escape($industry) ?></option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?= escape($category) ?>"<?= $category === $selectedCategory ? ' selected' : '' ?>>
+                                    <?= escape($category) ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                         <button class="button button-dark" type="submit">Filtern</button>
@@ -153,29 +95,29 @@ function escape(string $value): string
             </div>
 
             <p class="result-count">
-                <?= count($visibleStartups) ?> <?= count($visibleStartups) === 1 ? 'Profil' : 'Profile' ?>
-                <?php if ($selectedIndustry !== ''): ?>
-                    <span>in <?= escape($industries[$selectedIndustry]) ?></span>
+                <?= count($companies) ?> <?= count($companies) === 1 ? 'Profil' : 'Profile' ?>
+                <?php if ($selectedCategory !== ''): ?>
+                    <span>in <?= escape($selectedCategory) ?></span>
                 <?php endif; ?>
             </p>
 
             <div class="startup-grid">
-                <?php foreach ($visibleStartups as $startup): ?>
+                <?php foreach ($companies as $company): ?>
                     <article class="startup-card">
                         <div class="card-top">
-                            <span class="startup-logo startup-logo-<?= escape($startup['industry']) ?>" aria-hidden="true"><?= escape($startup['initials']) ?></span>
-                            <span class="industry"><?= escape($industries[$startup['industry']]) ?></span>
+                            <span class="startup-logo" aria-hidden="true"><?= escape($company['initials']) ?></span>
+                            <span class="industry"><?= escape($company['category']) ?></span>
                         </div>
-                        <h3><?= escape($startup['name']) ?></h3>
-                        <p class="location"><?= escape($startup['location']) ?></p>
-                        <p class="startup-idea"><?= escape($startup['idea']) ?></p>
+                        <h3><?= escape($company['name']) ?></h3>
+                        <p class="location"><?= escape($company['address']) ?></p>
+                        <p class="startup-idea"><?= escape($company['summary']) ?></p>
                         <dl class="funding">
                             <dt>Finanzierungsbedarf</dt>
-                            <dd><?= escape($startup['funding']) ?></dd>
+                            <dd><?= escape($company['funding']) ?></dd>
                         </dl>
                         <details>
                             <summary>Team kennenlernen</summary>
-                            <p><?= escape($startup['team']) ?></p>
+                            <p><?= escape($company['team']) ?></p>
                         </details>
                     </article>
                 <?php endforeach; ?>
@@ -209,4 +151,3 @@ function escape(string $value): string
     <?php require __DIR__ . '/../includes/footer.html'; ?>
 </body>
 </html>
-
