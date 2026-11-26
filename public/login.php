@@ -32,9 +32,9 @@ unset($_SESSION['login_error']);
 
                 <div class="login-heading">
 
-                    <a href="/start-connect/public/index.php" class="brand">
-                        <span class="brand-icon">S</span>
-                        Start<span class="brand-dot">Connect</span>
+                     <a class="brand" href="index.php" aria-label="StartConnect – Startseite">
+                      <span class="brand-icon" aria-hidden="true">↗</span>
+                          StartConnect
                     </a>
 
                     <h1>Willkommen zurück!</h1>
@@ -86,7 +86,7 @@ unset($_SESSION['login_error']);
                     </div>
 
                     <button type="submit" class="button button-primary">
-                        Einloggen
+                        Einloggen ↗
                     </button>
 
                 </form>

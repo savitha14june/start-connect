@@ -4,6 +4,80 @@ declare(strict_types=1);
 
 session_start();
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: /start-connect/public/login.php');
+    exit;
+}
+
+$email = trim((string) ($_POST['email'] ?? ''));
+$loginPassword = (string) ($_POST['password'] ?? '');
+
+if ($email === '' || $loginPassword === '') {
+    $_SESSION['login_error'] = 'Bitte E-Mail-Adresse und Passwort eingeben.';
+    header('Location: /start-connect/public/login.php');
+    exit;
+}
+
+try {
+    // Datenbankverbindung
+    $pdo = require __DIR__ . '/../config/db.php';
+
+    // Klassen laden
+    require_once __DIR__ . '/../src/Logger.php';
+    require_once __DIR__ . '/../src/repositories/UserRepo.php';
+    require_once __DIR__ . '/../src/services/UserService.php';
+
+    // Logger erstellen
+    $logger = new \App\Logger(__DIR__ . '/../logs/app.log');
+
+    // Repository erstellen
+    $userRepo = new UserRepo($pdo);
+
+    // Service erstellen
+    $userService = new UserService($userRepo, $logger);
+
+    // Login prüfen
+    $user = $userService->login($email, $loginPassword);
+
+    if (!$user) {
+        $_SESSION['login_error'] = 'E-Mail-Adresse oder Passwort ist ungültig.';
+        header('Location: /start-connect/public/login.php');
+        exit;
+    }
+
+    // Session-ID erneuern
+    session_regenerate_id(true);
+
+    // Benutzerdaten speichern
+    $_SESSION['user_id'] = (int) $user['id'];
+    $_SESSION['user_name'] = (string) $user['name'];
+    $_SESSION['user_role'] = (string) $user['role'];
+
+    // Zur Startseite weiterleiten
+    header('Location: /start-connect/public/index.php');
+    exit;
+
+} catch (Throwable $e) {
+
+    // Fehler protokollieren
+    if (isset($logger)) {
+        $logger->error('Fehler beim Login', [
+            'error' => $e->getMessage()
+        ]);
+    } else {
+        error_log('Login error: ' . $e->getMessage());
+    }
+
+    $_SESSION['login_error'] = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
+    header('Location: /start-connect/public/login.php');
+    exit;
+}
+
+
+/*declare(strict_types=1);
+
+session_start();
+
 // Nur POST-Anfragen erlauben
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: /start-connect/public/login.php');
@@ -65,3 +139,5 @@ try {
     header('Location: /start-connect/public/login.php');
     exit;
 }
+
+*/
