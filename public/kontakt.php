@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/../includes/session.php';
 
-session_start();
 
 require_once __DIR__ . '/../src/logger.php';
 require_once __DIR__ . '/../src/repositories/ContactMessageRepo.php';
