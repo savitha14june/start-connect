@@ -11,7 +11,7 @@ class UserRepo
         $this->pdo = $pdo;
     }
 
-    // البحث عن المستخدم باستخدام البريد الإلكتروني
+//
     public function findByEmail(string $email): ?array
     {
         $sql = 'SELECT * FROM users WHERE email = :email LIMIT 1';
@@ -26,7 +26,7 @@ class UserRepo
         return $user ?: null;
     }
 
-    // البحث عن المستخدم باستخدام ID
+    // 
     public function findById(int $id): ?array
     {
         $sql = 'SELECT id, name, email, role, address, telephone, profile_bio, created_at
@@ -44,7 +44,7 @@ class UserRepo
         return $user ?: null;
     }
 
-    // إنشاء مستخدم جديد
+//
     public function create(array $data): int
     {
         $sql = 'INSERT INTO users

@@ -1,0 +1,4 @@
+[2026-11-25 21:27:39] [INFO] Login erfolgreich {"user_id":2,"email":"founder1@test.de"}
+[2026-11-25 21:28:10] [WARNING] Login fehlgeschlagen {"email":"founder1@test.de"}
+[2026-11-25 21:32:52] [INFO] Login erfolgreich {"user_id":2,"email":"founder1@test.de"}
+[2026-11-25 21:40:32] [INFO] Login erfolgreich {"user_id":2,"email":"founder1@test.de"}
