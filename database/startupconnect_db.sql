@@ -296,3 +296,23 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+CREATE TABLE IF NOT EXISTS `investments` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `company_id` int(10) UNSIGNED NOT NULL,
+  `investor_user_id` int(10) UNSIGNED DEFAULT NULL,
+  `investor_name` varchar(150) NOT NULL,
+  `investor_email` varchar(190) NOT NULL,
+  `investor_phone` varchar(50) DEFAULT NULL,
+  `investor_address` varchar(255) DEFAULT NULL,
+  `investment_amount` decimal(15,2) NOT NULL,
+  `notes` text DEFAULT NULL,
+  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_investments_company` (`company_id`),
+  KEY `idx_investments_investor_user` (`investor_user_id`),
+  KEY `idx_investments_email` (`investor_email`),
+  CONSTRAINT `fk_investments_company` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_investments_investor_user` FOREIGN KEY (`investor_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

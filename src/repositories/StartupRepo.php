@@ -70,10 +70,10 @@ final class StartupRepo
             $stmt->execute($params);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // $this->logger->info('Loaded approved companies', [
-            //     'category' => $category ?? 'all',
-            //     'count' => count($rows),
-            // ]);
+            $this->logger->info('Loaded approved companies', [
+                'category' => $category ?? 'all',
+                'count' => count($rows),
+            ]);
 
             return $rows;
         } catch (Throwable $e) {
@@ -82,6 +82,57 @@ final class StartupRepo
                 'exception' => $e->getMessage(),
             ]);
             return [];
+        }
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function findApprovedCompanyById(int $id): ?array
+    {
+        try {
+            $sql = 'SELECT
+                        c.id,
+                        c.name,
+                        c.tagline,
+                        c.description,
+                        c.category,
+                        c.address,
+                        c.telephone,
+                        c.company_valuation,
+                        c.funding_goal,
+                        c.raised_amount,
+                        c.minimum_investment,
+                        c.profit_return_pct,
+                        c.created_at,
+                        u.name AS founder_name,
+                        u.email AS founder_email,
+                        u.profile_bio AS founder_bio
+                    FROM companies c
+                    LEFT JOIN users u ON u.id = c.owner_user_id
+                    WHERE c.id = :id AND c.status = :status
+                    LIMIT 1';
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                'id'     => $id,
+                'status' => 'approved',
+            ]);
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $this->logger->info('Loaded company details', [
+                'company_id' => $id,
+                'found'      => $row !== false,
+            ]);
+
+            return $row !== false ? $row : null;
+        } catch (Throwable $e) {
+            $this->logger->error('Failed to load company details', [
+                'company_id' => $id,
+                'exception'  => $e->getMessage(),
+            ]);
+            return null;
         }
     }
 }
