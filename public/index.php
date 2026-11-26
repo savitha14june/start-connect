@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-
+require_once __DIR__ . '/../includes/session.php';
 header('Content-Type: text/html; charset=UTF-8');
 
 require_once __DIR__ . '/../src/logger.php';

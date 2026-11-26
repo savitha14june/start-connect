@@ -2,3 +2,58 @@
 [2026-11-25 21:28:10] [WARNING] Login fehlgeschlagen {"email":"founder1@test.de"}
 [2026-11-25 21:32:52] [INFO] Login erfolgreich {"user_id":2,"email":"founder1@test.de"}
 [2026-11-25 21:40:32] [INFO] Login erfolgreich {"user_id":2,"email":"founder1@test.de"}
+[2026-11-26 10:48:15] [INFO] Login erfolgreich {"user_id":2,"email":"founder1@test.de"}
+[2026-11-26 11:03:40] [INFO] Registered investor account {"user_id":14,"email":"test@test.de"}
+[2026-11-26 11:04:17] [WARNING] Login fehlgeschlagen {"email":"test@test.de"}
+[2026-11-26 11:34:06] [WARNING] Login fehlgeschlagen {"email":"test@test.de"}
+[2026-11-26 11:36:38] [INFO] Login erfolgreich {"user_id":14,"email":"test@test.de"}
+[2026-11-26 15:35:48] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:36:02] [INFO] Login erfolgreich {"user_id":14,"email":"test@test.de"}
+[2026-11-26 15:36:02] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:36:46] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:41:26] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:41:28] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:42:09] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:42:11] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:42:12] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:42:41] [INFO] Login erfolgreich {"user_id":14,"email":"test@test.de"}
+[2026-11-26 15:42:41] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:42:49] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:42:50] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:45:35] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:45:36] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:45:47] [INFO] Login erfolgreich {"user_id":14,"email":"test@test.de"}
+[2026-11-26 15:45:47] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:46:02] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:53:15] [INFO] Login erfolgreich {"user_id":14,"email":"test@test.de"}
+[2026-11-26 15:53:15] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:54:11] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:54:32] [WARNING] Login fehlgeschlagen {"email":"test@test.de"}
+[2026-11-26 15:54:43] [INFO] Login erfolgreich {"user_id":14,"email":"test@test.de"}
+[2026-11-26 15:54:43] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 15:54:56] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:15:10] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:21:37] [INFO] Registered company and founder account {"user_id":15,"company_id":13,"email":"test1@test.de"}
+[2026-11-26 16:21:48] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:21:49] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:21:51] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:22:20] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:22:20] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:30:09] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:34:53] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:35:35] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:35:36] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:35:39] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:36:17] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:37:27] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:52:55] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:52:57] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:58:29] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 16:59:59] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 17:00:00] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 17:01:01] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 17:01:16] [INFO] Login erfolgreich {"user_id":14,"email":"test@test.de"}
+[2026-11-26 17:01:16] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 17:01:41] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 17:01:54] [INFO] Loaded approved companies {"category":"all","count":2}
+[2026-11-26 17:16:20] [INFO] Loaded approved companies {"category":"all","count":3}

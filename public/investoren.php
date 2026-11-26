@@ -1,6 +1,7 @@
 <?php
-
 declare(strict_types=1);
+
+require_once __DIR__ . '/../includes/session.php';
 
 $registrationAvailable = is_file(__DIR__ . '/register.php');
 ?>
