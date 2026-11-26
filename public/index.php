@@ -27,6 +27,27 @@ $categories = $service->getCategories();
 $selectedCategory = $service->resolveSelectedCategory($_GET['branche'] ?? '', $categories);
 $companies = $service->getCompanyCards($selectedCategory !== '' ? $selectedCategory : null);
 
+$reviews = [
+    [
+        'author' => 'Dr. Markus Weber',
+        'role'   => 'Business Angel · München',
+        'rating' => 5,
+        'quote'  => 'Über StartConnect habe ich zwei stark aufgestellte CleanTech-Teams kennengelernt. Die strukturierten Profile sparen enorm viel Zeit bei der Vorauswahl.',
+    ],
+    [
+        'author' => 'Elena Lindner',
+        'role'   => 'Co-Founderin · GreenGrid GmbH',
+        'rating' => 5,
+        'quote'  => 'Unser Profil war in wenigen Minuten online. Schon in der ersten Woche hatten wir drei qualifizierte Gespräche mit branchenerfahrenen Investoren.',
+    ],
+    [
+        'author' => 'Jonas Hartmann',
+        'role'   => 'Seed-Investor · Hamburg',
+        'rating' => 4,
+        'quote'  => 'Klare Kennzahlen, direkter Kontakt zu den Gründerteams und kein unnötiger Ballast. Genau so wünsche ich mir eine Plattform für Frühphasen-Investments.',
+    ],
+];
+
 function escape(?string $value): string
 {
     return htmlspecialchars($value ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -103,12 +124,17 @@ function escape(?string $value): string
 
             <div class="startup-grid">
                 <?php foreach ($companies as $company): ?>
-                    <article class="startup-card">
+                    <?php $detailUrl = 'company-details.php?id=' . rawurlencode($company['id']); ?>
+                    <article class="startup-card startup-card-clickable" data-href="<?= escape($detailUrl) ?>">
                         <div class="card-top">
                             <span class="startup-logo" aria-hidden="true"><?= escape($company['initials']) ?></span>
                             <span class="industry"><?= escape($company['category']) ?></span>
                         </div>
-                        <h3><?= escape($company['name']) ?></h3>
+                        <h3>
+                            <a class="startup-card-link" href="<?= escape($detailUrl) ?>">
+                                <?= escape($company['name']) ?>
+                            </a>
+                        </h3>
                         <p class="location"><?= escape($company['address']) ?></p>
                         <p class="startup-idea"><?= escape($company['summary']) ?></p>
                         <dl class="funding">
@@ -146,8 +172,45 @@ function escape(?string $value): string
                 </div>
             </div>
         </section>
+
+        <section id="bewertungen" class="reviews-section container" aria-labelledby="reviews-title">
+            <div class="section-heading">
+                <div>
+                    <h2 id="reviews-title">Stimmen aus unserem Netzwerk</h2>
+                    <p>Erfahrungen von Gründerteams und Investoren auf StartConnect.</p>
+                </div>
+            </div>
+
+            <div class="reviews-grid">
+                <?php foreach ($reviews as $review): ?>
+                    <?php
+                    $rating = max(1, min(5, (int) $review['rating']));
+                    $stars = str_repeat('★', $rating) . str_repeat('☆', 5 - $rating);
+                    ?>
+                    <article class="review-card">
+                        <p class="review-stars" aria-label="<?= $rating ?> von 5 Sternen"><?= $stars ?></p>
+                        <blockquote class="review-quote">„<?= escape($review['quote']) ?>“</blockquote>
+                        <div class="review-author">
+                            <strong><?= escape($review['author']) ?></strong>
+                            <span><?= escape($review['role']) ?></span>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
     </main>
 
     <?php require __DIR__ . '/../includes/footer.html'; ?>
+
+    <script>
+    document.querySelectorAll('.startup-card-clickable[data-href]').forEach((card) => {
+        card.addEventListener('click', (event) => {
+            if (event.target.closest('a, summary, details, button')) {
+                return;
+            }
+            window.location.href = card.dataset.href;
+        });
+    });
+    </script>
 </body>
 </html>

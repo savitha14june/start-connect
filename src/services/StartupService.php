@@ -51,17 +51,64 @@ final class StartupService
             }
 
             $cards[] = [
-                'name' => $name,
+                'id'       => (string) ($row['id'] ?? ''),
+                'name'     => $name,
                 'initials' => $this->makeInitials($name),
                 'category' => (string) ($row['category'] ?? ''),
-                'address' => (string) ($row['address'] ?? ''),
-                'summary' => $summary,
-                'funding' => $this->formatEur($row['funding_goal'] ?? null),
-                'team' => $team,
+                'address'  => (string) ($row['address'] ?? ''),
+                'summary'  => $summary,
+                'funding'  => $this->formatEur($row['funding_goal'] ?? null),
+                'team'     => $team,
             ];
         }
 
         return $cards;
+    }
+
+    /**
+     * @return array<string, string>|null
+     */
+    public function getCompanyDetails(int $id): ?array
+    {
+        if ($id <= 0) {
+            return null;
+        }
+
+        $row = $this->repo->findApprovedCompanyById($id);
+        if ($row === null) {
+            return null;
+        }
+
+        $name = (string) ($row['name'] ?? '');
+        $founderName = trim((string) ($row['founder_name'] ?? ''));
+        $founderBio = trim((string) ($row['founder_bio'] ?? ''));
+
+        $goal = (float) ($row['funding_goal'] ?? 0);
+        $raised = (float) ($row['raised_amount'] ?? 0);
+        $progressPct = $goal > 0 ? min(100, (int) round(($raised / $goal) * 100)) : 0;
+
+        $returnPct = $row['profit_return_pct'] !== null && $row['profit_return_pct'] !== ''
+            ? number_format((float) $row['profit_return_pct'], 1, ',', '.') . ' %'
+            : 'Auf Anfrage';
+
+        return [
+            'id'                 => (string) ($row['id'] ?? ''),
+            'name'               => $name,
+            'initials'           => $this->makeInitials($name),
+            'tagline'            => trim((string) ($row['tagline'] ?? '')),
+            'description'        => trim((string) ($row['description'] ?? '')),
+            'category'           => (string) ($row['category'] ?? ''),
+            'address'            => trim((string) ($row['address'] ?? '')) ?: 'Standort auf Anfrage',
+            'telephone'          => trim((string) ($row['telephone'] ?? '')) ?: 'Nicht angegeben',
+            'company_valuation'  => $this->formatEur($row['company_valuation'] ?? null),
+            'funding_goal'       => $this->formatEur($row['funding_goal'] ?? null),
+            'raised_amount'      => $this->formatEur($row['raised_amount'] ?? null),
+            'minimum_investment' => $this->formatEur($row['minimum_investment'] ?? null),
+            'profit_return_pct'  => $returnPct,
+            'progress_pct'       => (string) $progressPct,
+            'founder_name'       => $founderName !== '' ? $founderName : 'Gründerteam',
+            'founder_bio'        => $founderBio !== '' ? $founderBio : 'Weitere Informationen zum Team folgen in Kürze.',
+        ];
     }
 
     private function makeInitials(string $name): string

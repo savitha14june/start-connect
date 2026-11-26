@@ -455,3 +455,185 @@ details p { color: var(--muted); font-size: .9rem; padding-top: .5rem; }
     gap: .75rem;
     margin-top: .5rem;
 }
+
+.startup-card-clickable {
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.startup-card-clickable:hover {
+    transform: translateY(-3px);
+    border-color: #295542;
+    box-shadow: 0 12px 28px rgba(16, 44, 36, 0.08);
+}
+
+.startup-card-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.startup-card-link:hover {
+    text-decoration: underline;
+    text-underline-offset: .2em;
+}
+
+/* Customer Reviews */
+.reviews-section {
+    padding-block: clamp(2.75rem, 6vw, 5rem);
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+}
+
+.review-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid #d2ded3;
+    border-radius: 1.25rem;
+    background: #fffefa;
+}
+
+.review-stars {
+    color: #d97706;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    margin: 0;
+}
+
+.review-quote {
+    margin: 0;
+    color: #102c24;
+    line-height: 1.6;
+}
+
+.review-author {
+    display: grid;
+    gap: 0.15rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e6ede7;
+}
+
+.review-author span {
+    color: #43594f;
+    font-size: 0.92rem;
+}
+
+/* Company Details Page */
+.company-back-link {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    color: #dcfa87;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.company-back-link:hover {
+    text-decoration: underline;
+}
+
+.company-detail-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+}
+
+.company-detail-logo {
+    width: 3.75rem;
+    height: 3.75rem;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+}
+
+.company-detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.company-detail-main {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.company-description {
+    line-height: 1.65;
+}
+
+.funding-progress {
+    width: 100%;
+    height: 0.65rem;
+    margin-top: 1rem;
+    border-radius: 999px;
+    background: #e1eee6;
+    overflow: hidden;
+}
+
+.funding-progress-bar {
+    height: 100%;
+    background: #295542;
+    border-radius: 999px;
+}
+
+.funding-progress-label {
+    margin-top: 0.5rem;
+    font-size: 0.92rem;
+    color: #43594f;
+}
+
+.company-metrics {
+    width: 100%;
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.company-metrics div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid #e6ede7;
+}
+
+.company-metrics dt {
+    color: #43594f;
+}
+
+.company-metrics dd {
+    margin: 0;
+    font-weight: 700;
+    color: #102c24;
+    text-align: right;
+}
+
+.company-cta-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 1.25rem;
+}
+
+.company-detail-empty {
+    padding-block: 4rem;
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+}
+
+@media (max-width: 56rem) {
+    .reviews-grid,
+    .company-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .company-detail-header {
+        flex-direction: column;
+    }
+}
