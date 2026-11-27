@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
 
-    <?php require __DIR__ . '/../includes/header.html'; ?>
+    <?php require __DIR__ . '/../includes/header.php'; ?>
 
     <main id="inhalt">
         <section class="contact-hero" aria-labelledby="investor-signup-title">

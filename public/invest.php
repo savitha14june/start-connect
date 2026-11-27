@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $company !== null) {
 <body>
     <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
-    <?php require __DIR__ . '/../includes/header.html'; ?>
+    <?php require __DIR__ . '/../includes/header.php'; ?>
 
     <main id="main">
         <?php if ($company === null): ?>

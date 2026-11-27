@@ -1,3 +1,13 @@
+<?php
+declare(strict_types=1);
+
+require_once __DIR__ . '/../includes/session.php';
+?>
+
+
+
+
+
 <!doctype html>
 <html lang="de">
 <head>
@@ -131,7 +141,7 @@
 <body>
     <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
 
-    <?php require __DIR__ . '/../includes/header.html'; ?>
+    <?php require __DIR__ . '/../includes/header.php'; ?>
 
     <main id="inhalt" class="about-page">
         <section class="about-hero" aria-labelledby="about-titel">
