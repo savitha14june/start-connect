@@ -47,7 +47,7 @@ $messages = $stmtMessages->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Founder Dashboard – Start-Connect</title>
-    <link rel="stylesheet" href="/start-connect/public/assets/css/style.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <main class="dashboard-container">
@@ -66,7 +66,8 @@ $messages = $stmtMessages->fetchAll();
             <?php if (empty($companies)): ?>
                 <p>Es sind noch keine Unternehmen für Ihr Konto hinterlegt.</p>
             <?php else: ?>
-                <table border="1" cellpadding="8" cellspacing="0">
+                <div class="dashboard-table-wrap">
+                <table>
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -88,6 +89,7 @@ $messages = $stmtMessages->fetchAll();
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                </div>
             <?php endif; ?>
         </section>
 
@@ -97,7 +99,8 @@ $messages = $stmtMessages->fetchAll();
             <?php if (empty($messages)): ?>
                 <p>Aktuell liegen keine Nachrichten für Ihre Startups vor.</p>
             <?php else: ?>
-                <table border="1" cellpadding="8" cellspacing="0">
+                <div class="dashboard-table-wrap">
+                <table>
                     <thead>
                         <tr>
                             <th>Startup</th>
@@ -122,6 +125,7 @@ $messages = $stmtMessages->fetchAll();
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                </div>
             <?php endif; ?>
         </section>
     </main>

@@ -2,74 +2,70 @@
 
 declare(strict_types=1);
 
-session_start();
+require_once __DIR__ . '/../includes/session.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: /start-connect/public/login.php');
+$loginPage = '../public/login.php';
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+    header('Location: ' . $loginPage, true, 302);
     exit;
 }
 
-$email = trim((string) ($_POST['email'] ?? ''));
-$loginPassword = (string) ($_POST['password'] ?? '');
+$emailInput = $_POST['email'] ?? '';
+$passwordInput = $_POST['password'] ?? '';
+
+$email = is_string($emailInput) ? trim($emailInput) : '';
+$loginPassword = is_string($passwordInput) ? $passwordInput : '';
 
 if ($email === '' || $loginPassword === '') {
-    $_SESSION['login_error'] = 'Bitte E-Mail-Adresse und Passwort eingeben.';
-    header('Location: /start-connect/public/login.php');
+    $_SESSION['login_error'] = 'Bitte gib deine E-Mail-Adresse und dein Passwort ein.';
+    header('Location: ' . $loginPage, true, 303);
     exit;
 }
 
 try {
-    // Datenbankverbindung
     $pdo = require __DIR__ . '/../config/db.php';
 
-    // Klassen laden
     require_once __DIR__ . '/../src/Logger.php';
     require_once __DIR__ . '/../src/repositories/UserRepo.php';
     require_once __DIR__ . '/../src/services/UserService.php';
 
-    // Logger erstellen
     $logger = new \App\Logger(__DIR__ . '/../logs/app.log');
-
-    // Repository erstellen
     $userRepo = new UserRepo($pdo);
-
-    // Service erstellen
     $userService = new UserService($userRepo, $logger);
 
-    // Login prüfen
     $user = $userService->login($email, $loginPassword);
 
     if (!$user) {
         $_SESSION['login_error'] = 'E-Mail-Adresse oder Passwort ist ungültig.';
-        header('Location: /start-connect/public/login.php');
+        header('Location: ' . $loginPage, true, 303);
         exit;
     }
 
-    // Session-ID erneuern
     session_regenerate_id(true);
+    unset($_SESSION['login_error']);
 
-    // Benutzerdaten speichern
     $_SESSION['user_id'] = (int) $user['id'];
     $_SESSION['user_name'] = (string) $user['name'];
     $_SESSION['user_role'] = (string) $user['role'];
 
-    // Zur Startseite weiterleiten
-    header('Location: /start-connect/public/index.php');
+    $target = $_SESSION['user_role'] === 'investor'
+        ? '../public/dashboard-investoren.php'
+        : '../public/index.php';
+
+    header('Location: ' . $target, true, 303);
     exit;
-
 } catch (Throwable $e) {
-
-    // Fehler protokollieren
     if (isset($logger)) {
         $logger->error('Fehler beim Login', [
-            'error' => $e->getMessage()
+            'error' => $e->getMessage(),
         ]);
     } else {
         error_log('Login error: ' . $e->getMessage());
     }
 
-    $_SESSION['login_error'] = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
-    header('Location: /start-connect/public/login.php');
+    $_SESSION['login_error'] = 'Bei der Anmeldung ist ein Fehler aufgetreten. Bitte versuche es erneut.';
+    header('Location: ' . $loginPage, true, 303);
     exit;
 }
 

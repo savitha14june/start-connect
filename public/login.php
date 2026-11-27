@@ -18,7 +18,7 @@ unset($_SESSION['login_error']);
 
     <title>Login - StartConnect</title>
 
-    <link rel="stylesheet" href="/start-connect/public/index.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 
 <body>

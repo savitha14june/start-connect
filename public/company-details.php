@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-
+require_once __DIR__ . '/../includes/session.php';
 header('Content-Type: text/html; charset=UTF-8');
 
 require_once __DIR__ . '/../src/logger.php';
@@ -93,9 +93,8 @@ function escape(?string $value): string
                     <article class="contact-card">
                         <h3>Finanzierungsdaten</h3>
 
-                        <div class="funding-progress" aria-label="Finanzierungsfortschritt <?= escape($company['progress_pct']) ?> Prozent">
-                            <div class="funding-progress-bar" style="width: <?= escape($company['progress_pct']) ?>%;"></div>
-                        </div>
+                        <progress class="funding-progress" max="100" value="<?= escape($company['progress_pct']) ?>"
+                                  aria-label="Finanzierungsfortschritt"></progress>
                         <p class="funding-progress-label">
                             <strong><?= escape($company['raised_amount']) ?></strong> von <?= escape($company['funding_goal']) ?> finanziert (<?= escape($company['progress_pct']) ?> %)
                         </p>

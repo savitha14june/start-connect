@@ -5,10 +5,13 @@ $userName = (string) ($_SESSION['user_name'] ?? '');
 
 <header class="site-header">
     <div class="container header-inner">
-        <a class="brand" href="index.php">StartConnect</a>
+        <a class="brand" href="index.php" aria-label="StartConnect – Startseite">
+        <span class="brand-icon" aria-hidden="true">↗</span>
+         StartConnect<span class="brand-dot">.</span>
+        </a>
         <nav class="main-nav" aria-label="Hauptnavigation">
-        
-            <a href="index.php#startups">Startups</a>
+
+            <a href="startups.php">Startups</a>
             <a href="investoren.php">Investoren</a>
             <a href="ueberuns.php">Über uns</a>
             <a href="kontakt.php">Kontakt</a>
