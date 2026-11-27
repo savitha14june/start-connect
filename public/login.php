@@ -92,7 +92,8 @@ unset($_SESSION['login_error']);
 
                 <div class="login-footer">
                     Noch kein Konto?
-                    <a href="/start-connect/register.php">
+                    <a href="signup-company.php">Als Unternehmen registrieren</a>
+                    <a href="signup-investor.php">Als Investor registrieren</a>
                         Jetzt registrieren
                     </a>
                 </div>

@@ -65,7 +65,7 @@ function escape(?string $value): string
 <body>
     <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
-    <?php require __DIR__ . '/../includes/header.html'; ?>
+    <?php require __DIR__ . '/../includes/header.php'; ?>
 
     <main id="main">
         <section class="hero" aria-labelledby="hero-title">

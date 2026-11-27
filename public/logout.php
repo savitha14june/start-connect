@@ -1,13 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
-session_start();
-
-$isLoggedIn = isset($_SESSION['user_id']);
-
+require_once __DIR__ . '/../includes/session.php';
 ?>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 
 <head>
